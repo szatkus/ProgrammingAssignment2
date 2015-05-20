@@ -1,15 +1,39 @@
 ## Put comments here that give an overall description of what your
 ## functions do
 
-## Write a short comment describing this function
+## Simple matrix cache.
+## set.matrix/get.matrix - read and write cache index.
+## set.cache/get.cache - read and write cache value.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+        cache <- NULL
+        set.matrix <- function(y) {
+                x <<- y
+                cache <<- NULL
+        }
+        get.matrix <- function() {
+                x
+        }
+        set.cache <- function(c) {
+                cache <<- c
+        }
+        get.cache <- function() {
+                cache
+        }
+        list(set.matrix = set.matrix, get.matrix = get.matrix,
+             set.cache = set.cache, get.cache = get.cache)
 }
 
 
-## Write a short comment describing this function
+## Takes excactly same arguments as solve, except the first arguments which should be a matrix cache.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        m <- x$get.cache()
+        if(!is.null(m)) {
+                return(m)
+        }
+        data <- x$get.matrix()
+        m <- solve(data, ...)
+        x$set.cache(m)
+        m
 }
